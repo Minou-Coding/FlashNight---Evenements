@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashNight - Événements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #00c3ff;
+            --secondary-color: #05e0ff;
+            --background-color: #001430;
+            --dark-blue: #000e24;
+            --light-blue: #0055ff;
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 85, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 30%, rgba(0, 85, 255, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(0, 195, 255, 0.05) 0%, transparent 50%);
+            overflow-x: hidden;
+        }
+
+        /* Animation circulaire */
+        .circle {
+            position: absolute;
+            border: 2px solid var(--light-blue);
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .circle-1 {
+            width: 150px;
+            height: 150px;
+            top: 100px;
+            left: 200px;
+            animation: pulse 15s infinite alternate;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            top: 80px;
+            left: 180px;
+            animation: pulse 20s infinite alternate-reverse;
+        }
+
+        .circle-3 {
+            width: 180px;
+            height: 180px;
+            bottom: 120px;
+            right: 200px;
+            animation: pulse 18s infinite alternate;
+        }
+
+        .circle-4 {
+            width: 250px;
+            height: 250px;
+            bottom: 100px;
+            right: 180px;
+            animation: pulse 25s infinite alternate-reverse;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(0, 14, 36, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 195, 255, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            font-weight: 300;
+            margin-top: 5px;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+            cursor: pointer;
+            font-weight: 500;
+            padding: 10px;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background-color: rgba(0, 14, 36, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 195, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 195, 255, 0.4);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .card-content {
+            line-height: 1.6;
+        }
+
+        .event-card {
+            display: flex;
+            background: linear-gradient(135deg, rgba(0, 14, 36, 0.8) 0%, rgba(0, 20, 48, 0.8) 100%);
+        }
+
+        .event-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .event-time {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--dark-blue);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: rgba(0, 85, 255, 0.3);
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--dark-blue);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 195, 255, 0.4);
+        }
+
+        .event-date {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .event-date i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        .event-date span {
+            font-weight: 500;
+        }
+
+        .event-location {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .event-location i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        .event-location span {
+            font-weight: 500;
+        }
+
+        .event-host {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .event-host i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        .event-host span {
+            font-weight: 500;
+        }
+
+        .btn-interested {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .btn-interested:hover {
+            background: rgba(0, 195, 255, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(0, 195, 255, 0.2);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .logo-container {
+                margin-bottom: 15px;
+            }
+
+            nav {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                margin: 5px;
+            }
+
+            .event-card {
+                flex-direction: column;
+            }
+
+            .event-image {
+                width: 100%;
+                height: 200px;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Cercles d'animation de fond -->
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+    <div class="circle circle-4"></div>
+
+    <header>
+        <div class="logo-container">
+            <img src="https://i.ibb.co/0p1QMzKH/7f933f6ef04e.png" alt="FlashNight Logo" class="logo">
+            <div>
+                <h1 class="title">FlashNight - Panneau Pocket</h1>
+                <p class="subtitle">Découvre les informations et actualités de la ville !</p>
+            </div>
+        </div>
+        <nav>
+            <a href="index.html" class="nav-item">Accueil</a>
+            <a href="patches.html" class="nav-item">Patch Notes</a>
+            <a href="informations.html" class="nav-item">Informations</a>
+            <a href="evenements.html" class="nav-item active">Événements</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2 class="card-title">Événements à venir</h2>
+
+        <div class="card">
+            <div class="card-content event-card">
+                <img src="https://i.imgur.com/Jvh1OQm.jpeg" alt="Course de rue" class="event-image">
+                <div class="event-details">
+                    <span class="tag">Illégal</span>
+                    <span class="tag">Compétition</span>
+                    <h3>Grande course de rue illégale</h3>
+                    
+                    <div class="event-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>25 juin 2025 - 21h00</span>
+                    </div>
+                    
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Point de départ sous le pont de La Mesa</span>
+                    </div>
+                    
+                    <div class="event-host">
+                        <i class="fas fa-user"></i>
+                        <span>Organisé par: Les Rois de l'Asphalte</span>
+                    </div>
+                    
+                    <p>Une course illégale va être organisée dans les rues de la ville. De nombreux prix à gagner pour les meilleurs pilotes ! Le parcours traversera les quartiers les plus dangereux de Los Santos.</p>
+                    <br>
+                    <p>Prix : 1er - 250,000$ | 2ème - 100,000$ | 3ème - 50,000$</p>
+                    <p>Inscription : 25,000$ par participant</p>
+                    
+                    <div>
+                        <a href="#" class="btn btn-interested"><i class="far fa-star"></i> Intéressé(e)</a>
+                        <a href="#" class="btn"><i class="fas fa-arrow-right"></i> En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content event-card">
+                <img src="https://i.imgur.com/qVbzrSG.jpeg" alt="Soirée Casino" class="event-image">
+                <div class="event-details">
+                    <span class="tag">VIP</span>
+                    <span class="tag">Divertissement</span>
+                    <h3>Soirée VIP au Casino Diamond</h3>
+                    
+                    <div class="event-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>28 juin 2025 - 20h00</span>
+                    </div>
+                    
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Casino Diamond, Vinewood</span>
+                    </div>
+                    
+                    <div class="event-host">
+                        <i class="fas fa-user"></i>
+                        <span>Organisé par: Direction du Casino</span>
+                    </div>
+                    
+                    <p>Le Casino Diamond organise une soirée VIP avec tables de jeux exclusives, buffet de luxe et spectacle privé. Tenue correcte exigée. Prix d'entrée : 5,000$</p>
+                    <br>
+                    <p>Un tirage au sort aura lieu à minuit avec un jackpot spécial de 1,000,000$ !</p>
+                    <p>Les tables de jeux auront des limites plus élevées que d'habitude pour l'occasion.</p>
+                    
+                    <div>
+                        <a href="#" class="btn btn-interested"><i class="far fa-star"></i> Intéressé(e)</a>
+                        <a href="#" class="btn"><i class="fas fa-arrow-right"></i> En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content event-card">
+                <img src="https://i.imgur.com/zBpn9zE.jpeg" alt="Inauguration Nightclub" class="event-image">
+                <div class="event-details">
+                    <span class="tag">Ouverture</span>
+                    <span class="tag">Fête</span>
+                    <h3>Inauguration du Nightclub "Pulse"</h3>
+                    
+                    <div class="event-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>2 juillet 2025 - 22h00</span>
+                    </div>
+                    
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Pulse Nightclub, Centre-ville</span>
+                    </div>
+                    
+                    <div class="event-host">
+                        <i class="fas fa-user"></i>
+                        <span>Organisé par: DJ BlackLight</span>
+                    </div>
+                    
+                    <p>Venez célébrer l'ouverture du nouveau nightclub de la ville ! DJ international, boissons gratuites pendant les deux premières heures et nombreuses surprises.</p>
+                    <br>
+                    <p>Une occasion unique de faire des rencontres et de vous amuser dans le nouveau lieu branché de la ville.</p>
+                    <p>Entrée : 1,000$ (gratuite pour les VIP)</p>
+                    
+                    <div>
+                        <a href="#" class="btn btn-interested"><i class="far fa-star"></i> Intéressé(e)</a>
+                        <a href="#" class="btn"><i class="fas fa-arrow-right"></i> En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content event-card">
+                <img src="https://i.imgur.com/Pc0pT7U.jpeg" alt="Festival été" class="event-image">
+                <div class="event-details">
+                    <span class="tag">Festival</span>
+                    <span class="tag">Musique</span>
+                    <h3>Festival d'été de Los Santos</h3>
+                    
+                    <div class="event-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>10 juillet 2025 - Toute la journée</span>
+                    </div>
+                    
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Plage de Vespucci</span>
+                    </div>
+                    
+                    <div class="event-host">
+                        <i class="fas fa-user"></i>
+                        <span>Organisé par: Mairie de Los Santos</span>
+                    </div>
+                    
+                    <p>Le grand festival annuel de Los Santos arrive ! Concerts, activités, stands de nourriture et feu d'artifice. Un événement à ne pas manquer !</p>
+                    <br>
+                    <p>De nombreux artistes seront présents pour des performances live. Entrée gratuite pour tous les citoyens.</p>
+                    <p>Programme complet : concerts de 14h à 2h du matin, activités nautiques, concours de châteaux de sable, et grand feu d'artifice à minuit.</p>
+                    
+                    <div>
+                        <a href="#" class="btn btn-interested"><i class="far fa-star"></i> Intéressé(e)</a>
+                        <a href="#" class="btn"><i class="fas fa-arrow-right"></i> En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content event-card">
+                <img src="https://i.imgur.com/DSscQKj.jpeg" alt="Tournoi MMA" class="event-image">
+                <div class="event-details">
+                    <span class="tag">Combat</span>
+                    <span class="tag">Illégal</span>
+                    <h3>Tournoi MMA underground</h3>
+                    
+                    <div class="event-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>15 juillet 2025 - 23h00</span>
+                    </div>
+                    
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Entrepôt abandonné, Zone industrielle</span>
+                    </div>
+                    
+                    <div class="event-host">
+                        <i class="fas fa-user"></i>
+                        <span>Organisé par: The Pit</span>
+                    </div>
+                    
+                    <p>Un tournoi clandestin de MMA est organisé dans un entrepôt abandonné. Inscriptions limitées à 16 participants. Mise de départ : 10,000$</p>
+                    <br>
+                    <p>Le vainqueur remportera la totalité de la cagnotte. Attention, cet événement est illégal et pourrait attirer l'attention de la police.</p>
+                    <p>Règles : combats à mains nues, pas d'armes, KO ou abandon uniquement. Paris autorisés.</p>
+                    
+                    <div>
+                        <a href="#" class="btn btn-interested"><i class="far fa-star"></i> Intéressé(e)</a>
+                        <a href="#" class="btn"><i class="fas fa-arrow-right"></i> En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content event-card">
+                <img src="https://i.imgur.com/Rw4xMXI.jpeg" alt="Concours tuning" class="event-image">
+                <div class="event-details">
+                    <span class="tag">Automobile</span>
+                    <span class="tag">Compétition</span>
+                    <h3>Grand concours de tuning</h3>
+                    
+                    <div class="event-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>20 juillet 2025 - 14h00</span>
+                    </div>
+                    
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Parking du Maze Bank Arena</span>
+                    </div>
+                    
+                    <div class="event-host">
+                        <i class="fas fa-user"></i>
+                        <span>Organisé par: Los Santos Customs</span>
+                    </div>
+                    
+                    <p>Présentez votre véhicule personnalisé et tentez de remporter le prix du meilleur tuning de Los Santos ! Plusieurs catégories en compétition.</p>
+                    <br>
+                    <p>Catégories : Meilleur design extérieur, Meilleure performance, Meilleur design intérieur, Meilleur son, et Prix du public.</p>
+                    <p>Inscription : 5,000$ par véhicule. Prix à gagner : 100,000$ et des pièces exclusives.</p>
+                    
+                    <div>
+                        <a href="#" class="btn btn-interested"><i class="far fa-star"></i> Intéressé(e)</a>
+                        <a href="#" class="btn"><i class="fas fa-arrow-right"></i> En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 FlashNight RP - Tous droits réservés</p>
+        <p>Développé avec ❤️ par l'équipe FlashNight</p>
+    </footer>
+
+    <script>
+        // Animation des cercles en arrière-plan
+        function animateCircles() {
+            const circles = document.querySelectorAll('.circle');
+            
+            circles.forEach((circle, index) => {
+                const randomX = Math.random() * 10 - 5;
+                const randomY = Math.random() * 10 - 5;
+                
+                setTimeout(() => {
+                    circle.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                }, index * 100);
+            });
+            
+            setTimeout(animateCircles, 5000);
+        }
+        
+        // Démarrer l'animation des cercles
+        animateCircles();
+    </script>
+</body>
+</html>
